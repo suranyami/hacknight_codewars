@@ -12,7 +12,6 @@ Hank $171000 93
 Isaac $111000 69
 EOF
 
-puts FILE.split("\n").size
 players = FILE.split("\n").collect do |player|
   name, cash, performance_score = player.split(' ')
   cash = cash.gsub('$', '').to_i
@@ -24,4 +23,25 @@ end.sort() {|a,b|
 
 players.each do |player|
   pp player
+end
+
+def total(array)
+  result = 0
+  array.each {|item| result += item[2]}
+  result
+end
+
+def cost(array)
+  result = 0
+  array.each {|item| result += item[1]}
+  result
+end
+
+high_performers = players.combination(5).to_a.sort do |a, b|
+  ta, tb = total(a), total(b)
+  ta <=> tb
+end.reverse.reject {|i| cost(i) > 700000}
+
+high_performers.each do |h|
+  puts "#{h.inspect}, total = #{total(h)}, cost = #{cost(h)}"
 end
